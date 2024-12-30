@@ -4,7 +4,7 @@ import { GameBoard } from './components/GameBoard';
 import { useGameLogic } from './hooks/useGameLogic';
 
 function App() {
-  const { gameState, playerStats, input, startGame, handleType } = useGameLogic();
+  const { gameState, playerStats, input, startGame, handleType, showHint } = useGameLogic();
 
   return (
     <div 
@@ -19,16 +19,19 @@ function App() {
           <Terminal className="w-8 h-8 text-emerald-400" />
           <h1 className="text-4xl font-bold text-white">Code Quest</h1>
         </div>
-        <p className="text-emerald-400">Debug. Type. Conquer.</p>
+        <p className="text-emerald-400">Debug. Fix. Conquer.</p>
       </div>
 
       {gameState.gameStatus === 'idle' ? (
-        <button
-          onClick={startGame}
-          className="px-6 py-3 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors mb-8"
-        >
-          Start Game
-        </button>
+        <div className="text-center">
+          <p className="text-white mb-4">Find and fix the bugs in the code!</p>
+          <button
+            onClick={startGame}
+            className="px-6 py-3 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors mb-8"
+          >
+            Start Game
+          </button>
+        </div>
       ) : gameState.gameStatus === 'gameOver' ? (
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-4">Game Over!</h2>
@@ -46,6 +49,7 @@ function App() {
           playerStats={playerStats}
           input={input}
           onType={handleType}
+          onShowHint={showHint}
         />
       )}
     </div>

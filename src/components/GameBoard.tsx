@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bug, Cpu, Heart, Trophy } from 'lucide-react';
+import { Bug, Cpu, Heart, Trophy, HelpCircle } from 'lucide-react';
 import { GameState, PlayerStats } from '../types/game';
 
 interface GameBoardProps {
@@ -7,13 +7,15 @@ interface GameBoardProps {
   playerStats: PlayerStats;
   input: string;
   onType: (text: string) => void;
+  onShowHint: () => void;
 }
 
 export const GameBoard: React.FC<GameBoardProps> = ({ 
   gameState, 
   playerStats, 
   input,
-  onType 
+  onType,
+  onShowHint
 }) => {
   return (
     <div className="w-full max-w-4xl p-6 bg-black/80 rounded-lg shadow-lg backdrop-blur-sm border border-emerald-500/30">
@@ -42,17 +44,34 @@ export const GameBoard: React.FC<GameBoardProps> = ({
             <div className="absolute -top-3 -left-3">
               <Bug className="w-8 h-8 text-red-500 animate-bounce" />
             </div>
-            <pre className="font-mono text-lg text-emerald-300 mb-4 whitespace-pre-wrap break-all">
-              {gameState.currentChallenge.code}
-            </pre>
-            <input
-              type="text"
-              value={input}
-              className="w-full bg-black/80 border border-emerald-500/30 rounded p-3 text-emerald-400 font-mono focus:outline-none focus:border-emerald-500"
-              placeholder="Type the code here..."
-              onChange={(e) => onType(e.target.value)}
-              autoFocus
-            />
+            <div className="mb-4">
+              <h3 className="text-emerald-400 text-lg mb-2">Debug this code:</h3>
+              <pre className="font-mono text-lg text-red-400 mb-4 whitespace-pre-wrap break-all bg-black/40 p-4 rounded">
+                {gameState.currentChallenge.code}
+              </pre>
+              {gameState.showHint && (
+                <div className="text-yellow-400 mb-4 p-2 bg-yellow-400/10 rounded">
+                  💡 Hint: {gameState.currentChallenge.hint}
+                </div>
+              )}
+            </div>
+            <div className="flex gap-4">
+              <input
+                type="text"
+                value={input}
+                className="flex-1 bg-black/80 border border-emerald-500/30 rounded p-3 text-emerald-400 font-mono focus:outline-none focus:border-emerald-500"
+                placeholder="Fix the code here..."
+                onChange={(e) => onType(e.target.value)}
+                autoFocus
+              />
+              <button
+                onClick={onShowHint}
+                className="px-4 py-2 bg-yellow-500/20 text-yellow-400 rounded hover:bg-yellow-500/30 transition-colors flex items-center gap-2"
+              >
+                <HelpCircle className="w-5 h-5" />
+                Hint
+              </button>
+            </div>
           </>
         )}
       </div>

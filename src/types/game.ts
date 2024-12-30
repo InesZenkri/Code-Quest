@@ -1,6 +1,8 @@
 export interface CodeChallenge {
   id: string;
   code: string;
+  solution: string;
+  hint: string;
   timeLimit: number;
 }
 
@@ -10,6 +12,7 @@ export interface GameState {
   health: number;
   currentChallenge: CodeChallenge | null;
   gameStatus: 'idle' | 'playing' | 'paused' | 'gameOver';
+  showHint: boolean;
 }
 
 export interface PlayerStats {
