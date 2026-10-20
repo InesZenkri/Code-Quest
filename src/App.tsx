@@ -1,59 +1,25 @@
-import React from 'react';
-import { Terminal } from 'lucide-react';
 import { GameBoard } from './components/GameBoard';
 import { useGameLogic } from './hooks/useGameLogic';
 
-function App() {
-  const { gameState, playerStats, input, startGame, handleType, showHint } = useGameLogic();
-
-  return (
-    <div 
-      className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-4"
-      style={{
-        backgroundImage: 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%)'
-      }}
-    >
-      {/* Game Title */}
-      <div className="text-center mb-8">
-        <div className="flex items-center justify-center gap-3 mb-2">
-          <Terminal className="w-8 h-8 text-emerald-400" />
-          <h1 className="text-4xl font-bold text-white">Code Quest</h1>
-        </div>
-        <p className="text-emerald-400">Debug. Fix. Conquer.</p>
-      </div>
-
-      {gameState.gameStatus === 'idle' ? (
-        <div className="text-center">
-          <p className="text-white mb-4">Find and fix the bugs in the code!</p>
-          <button
-            onClick={startGame}
-            className="px-6 py-3 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors mb-8"
-          >
-            Start Game
-          </button>
-        </div>
-      ) : gameState.gameStatus === 'gameOver' ? (
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-white mb-4">Game Over!</h2>
-          <p className="text-emerald-400 mb-4">Final Score: {gameState.score}</p>
-          <button
-            onClick={startGame}
-            className="px-6 py-3 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors"
-          >
-            Play Again
-          </button>
-        </div>
-      ) : (
-        <GameBoard
-          gameState={gameState}
-          playerStats={playerStats}
-          input={input}
-          onType={handleType}
-          onShowHint={showHint}
-        />
-      )}
-    </div>
-  );
+export default function App() {
+  const s = useGameLogic();
+  return <main className="shell">
+    <header><div className="brand-mark" aria-hidden="true">{'</>'}</div><p className="eyebrow">JavaScript debugging practice</p>
+      <h1>Debug Sprint</h1><p className="intro">Small snippets. One bug at a time.</p></header>
+    {s.game.status === 'idle' ? <section className="board welcome">
+      <h2>Find the bug. Write the fix.</h2>
+      <p>{s.total} short challenges covering syntax, arrays, loops, operators and async code. Each round includes a hint and an explanation.</p>
+      <div className="mode-grid"><div><h3>Sprint</h3><p>Race the clock with three lives. A timeout or skip costs a life; wrong answers can be retried until time runs out.</p><button className="primary" onClick={() => s.start('sprint')}>Start sprint</button></div>
+        <div><h3>Practice</h3><p>No clock, no lost lives. Take your time, try a fix, then read why it works.</p><button onClick={() => s.start('practice')}>Start practice</button></div></div>
+      <p className="muted">Sprint best on this browser: {s.best} points</p>
+      <details><summary>How answers and scores work</summary><p>Answers are compared with a reference string, not executed. Equivalent code with different formatting may not be accepted. This is a reading and repair exercise, not a JavaScript judge.</p><p>A correct fix earns 100 points plus whole seconds remaining in sprint mode. A hint reduces that round's potential reward by 20 once. Practice has no time bonus and does not change your sprint best.</p></details>
+    </section> : s.game.status === 'finished' ? <section className="board welcome">
+      <p className="eyebrow">{s.game.mode === 'sprint' ? 'Sprint' : 'Practice'} complete</p>
+      <h2>{s.game.lives === 0 ? 'Out of lives. Keep practicing.' : 'Every round reviewed.'}</h2>
+      <div className="results"><strong>{s.game.score} points</strong><span>{s.game.solved} / {s.total} fixed</span><span>{s.game.attempts} answer submissions</span></div>
+      <p className="muted">Sprint best on this browser: {s.best}</p>
+      <div className="actions"><button className="primary" onClick={() => s.start(s.game.mode)}>Try again</button><button onClick={s.home}>Choose mode</button></div>
+    </section> : <><GameBoard session={s} /><button className="quiet" onClick={s.home}>Leave round / choose mode</button></>}
+    <footer>No sign-in. No code execution. Best score stays in this browser.</footer>
+  </main>;
 }
-
-export default App;
