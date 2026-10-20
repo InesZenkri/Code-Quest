@@ -1,54 +1,45 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
-@keyframes matrix-rain {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-}
-
-.matrix-background {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.matrix-character {
-  position: absolute;
-  color: #10b981;
-  font-family: monospace;
-  font-size: 1.2rem;
-  animation: matrix-rain 2s linear infinite;
-  opacity: 0;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.3);
-}
-
-::-webkit-scrollbar-thumb {
-  background: #10b981;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #047857;
-}
+:root { font-family: Inter, ui-sans-serif, system-ui, sans-serif; color: #e2e8f0; background: #0b1118; font-synthesis: none; line-height: 1.6; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, textarea { font: inherit; }
+button { cursor: pointer; border: 1px solid #465568; border-radius: 8px; padding: .7rem 1rem; color: #e2e8f0; background: #1a2634; font-weight: 600; }
+button:hover { background: #27384b; }
+button:disabled { opacity: .55; cursor: default; }
+button.primary { background: #63e6be; border-color: #63e6be; color: #09251d; }
+button.primary:hover { background: #99f6d5; }
+:focus-visible { outline: 3px solid #facc15; outline-offset: 4px; }
+.shell { max-width: 960px; margin: 0 auto; padding: 48px 24px 24px; }
+header { margin-bottom: 30px; }
+.brand-mark { color: #63e6be; font: bold 28px ui-monospace, monospace; margin-bottom: 12px; }
+h1 { font-size: clamp(2.4rem, 7vw, 3.8rem); line-height: 1.1; font-weight: 750; margin: 8px 0 14px; letter-spacing: -.04em; }
+h2 { font-size: 1.65rem; line-height: 1.3; font-weight: 650; margin: 0 0 16px; }
+h3 { font-size: 1.1rem; font-weight: 650; margin: 0 0 10px; }
+p { margin: 0 0 16px; }
+.eyebrow { text-transform: uppercase; letter-spacing: .13em; font-size: .75rem; font-weight: 650; color: #63e6be; margin-bottom: 8px; }
+.intro { color: #a8b8ca; font-size: 1.1rem; }
+.board { background: #111c28; border: 1px solid #2b3d50; border-radius: 16px; padding: 30px; }
+.welcome > p { max-width: 68ch; }
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin: 26px 0; }
+.mode-grid > div { padding: 22px; background: #0b1520; border: 1px solid #2b3d50; border-radius: 10px; }
+.mode-grid p { color: #b6c4d5; min-height: 105px; }
+.muted { color: #adbed0; font-size: .88rem; }
+details { border-top: 1px solid #2b3d50; padding-top: 18px; }
+summary { cursor: pointer; color: #d8e4ef; }
+details p { margin: 14px 0 0; color: #adbed0; }
+.round-meta, .metrics { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.round-meta { color: #adbed0; font-size: .85rem; margin-bottom: 14px; }
+.metrics { border-bottom: 1px solid #2b3d50; padding-bottom: 18px; margin-bottom: 26px; }
+.metrics strong { margin-left: 8px; color: #63e6be; }
+.metrics .urgent, .metrics .urgent strong { color: #fda4af; }
+pre { overflow-x: auto; white-space: pre; font: .95rem/1.8 ui-monospace, SFMono-Regular, Consolas, monospace; background: #090f17; color: #fda4af; padding: 18px; border-radius: 8px; margin: 8px 0 22px; border-left: 3px solid #fb7185; }
+pre.fixed { color: #99f6d5; border-color: #63e6be; }
+label { display: block; margin-bottom: 8px; font-weight: 600; }
+textarea { width: 100%; min-height: 130px; resize: vertical; padding: 14px; background: #090f17; border: 1px solid #59718b; border-radius: 8px; color: #e2e8f0; font-family: ui-monospace, monospace; font-size: 16px; line-height: 1.6; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 4px; }
+.hint { color: #fde68a; background: #332d18; padding: 14px; border-radius: 8px; margin-top: 20px; }
+.feedback { color: #c8d8e9; margin: 20px 0 0; min-height: 1.6em; }
+.results { display: flex; flex-wrap: wrap; gap: 20px; margin: 24px 0; color: #99f6d5; }
+.quiet { background: transparent; margin-top: 18px; font-size: .85rem; }
+footer { color: #91a3b7; font-size: .8rem; margin-top: 30px; }
+@media (max-width: 600px) { .shell { padding: 24px 14px; } .board { padding: 20px 16px; } .mode-grid { grid-template-columns: 1fr; gap: 14px; } .mode-grid p { min-height: 0; } .metrics { font-size: .9rem; } }
