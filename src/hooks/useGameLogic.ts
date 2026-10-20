@@ -1,109 +1,36 @@
-import { useState, useEffect } from 'react';
-import { GameState, PlayerStats } from '../types/game';
+import { useEffect, useState } from 'react';
 import { codeChallenges } from '../data/challenges';
+import { finishRound, initialState, nextRound, startRound, submitAnswer, tick, revealHint } from '../lib/game';
+import type { Mode } from '../types/game';
 
+const BEST_KEY = 'debug-game:sprint-best:v1';
+function readBest() {
+  try {
+    const value = Number(localStorage.getItem(BEST_KEY));
+    return Number.isFinite(value) && value >= 0 ? value : 0;
+  } catch { return 0; }
+}
 export function useGameLogic() {
-  const [gameState, setGameState] = useState<GameState>({
-    score: 0,
-    level: 1,
-    health: 3,
-    currentChallenge: null,
-    gameStatus: 'idle',
-    showHint: false
-  });
-
-  const [playerStats, setPlayerStats] = useState<PlayerStats>({
-    accuracy: 100,
-    wpm: 0,
-    timeElapsed: 0
-  });
-
+  const [game, setGame] = useState(initialState());
   const [input, setInput] = useState('');
-  const [startTime, setStartTime] = useState<number | null>(null);
-
-  const startGame = () => {
-    setGameState({
-      score: 0,
-      level: 1,
-      health: 3,
-      currentChallenge: codeChallenges[0],
-      gameStatus: 'playing',
-      showHint: false
-    });
-    setPlayerStats({
-      accuracy: 100,
-      wpm: 0,
-      timeElapsed: 0
-    });
-    setInput('');
-    setStartTime(Date.now());
-  };
-
-  const handleType = (text: string) => {
-    setInput(text);
-    
-    if (!gameState.currentChallenge) return;
-
-    // Calculate accuracy
-    const target = gameState.currentChallenge.solution;
-    let correctChars = 0;
-    for (let i = 0; i < text.length; i++) {
-      if (text[i] === target[i]) correctChars++;
-    }
-    const accuracy = Math.round((correctChars / Math.max(text.length, 1)) * 100);
-
-    // Calculate WPM
-    if (startTime) {
-      const timeElapsed = (Date.now() - startTime) / 1000;
-      const words = text.length / 5;
-      const wpm = Math.round((words / timeElapsed) * 60);
-
-      setPlayerStats(prev => ({
-        ...prev,
-        accuracy,
-        wpm,
-        timeElapsed: Math.round(timeElapsed)
-      }));
-    }
-
-    // Check if solution is correct
-    if (text === gameState.currentChallenge.solution) {
-      const nextLevel = gameState.level;
-      const nextChallenge = codeChallenges[nextLevel];
-      
-      if (nextChallenge) {
-        setGameState(prev => ({
-          ...prev,
-          score: prev.score + Math.floor(100 * (1 + nextLevel * 0.5)), // Higher levels give more points
-          level: prev.level + 1,
-          currentChallenge: nextChallenge,
-          showHint: false
-        }));
-      } else {
-        setGameState(prev => ({
-          ...prev,
-          gameStatus: 'gameOver'
-        }));
-      }
-      setInput('');
-      setStartTime(Date.now());
-    }
-  };
-
-  const showHint = () => {
-    setGameState(prev => ({
-      ...prev,
-      showHint: true,
-      score: Math.max(0, prev.score - 10) // Penalty for using hint
-    }));
-  };
-
+  const [best, setBest] = useState(readBest);
+  useEffect(() => {
+    if (game.status !== 'playing' || game.mode !== 'sprint') return;
+    const timer = window.setInterval(() => setGame(prev => tick(prev, Date.now())), 200);
+    return () => window.clearInterval(timer);
+  }, [game.status, game.mode]);
+  useEffect(() => {
+    if (game.status !== 'finished' || game.mode !== 'sprint' || game.score <= best) return;
+    setBest(game.score);
+    try { localStorage.setItem(BEST_KEY, String(game.score)); } catch { /* Storage may be disabled. Play still works. */ }
+  }, [game.status, game.mode, game.score, best]);
   return {
-    gameState,
-    playerStats,
-    input,
-    startGame,
-    handleType,
-    showHint
+    game, input, setInput, best, challenge: codeChallenges[game.index], total: codeChallenges.length,
+    start: (mode: Mode) => { setInput(''); setGame(startRound(initialState(mode), codeChallenges[0], Date.now())); },
+    submit: () => setGame(prev => submitAnswer(prev, codeChallenges[prev.index], input, Date.now())),
+    hint: () => setGame(prev => revealHint(prev)),
+    skip: () => setGame(prev => finishRound(tick(prev, Date.now()), false)),
+    next: () => { setInput(''); setGame(prev => nextRound(prev, codeChallenges, Date.now())); },
+    home: () => { setInput(''); setGame(initialState()); },
   };
 }

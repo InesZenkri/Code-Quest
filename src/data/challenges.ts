@@ -1,37 +1,56 @@
-export const codeChallenges = [
-  {
-    id: '1',
-    code: 'console.log(Hello World);', // Missing quotes
-    solution: 'console.log("Hello World");',
-    hint: 'Strings need to be wrapped in quotes',
-    timeLimit: 15
-  },
-  {
-    id: '2',
-    code: 'function sum(a, b) { retur a + b; }', // Missing 'n' in return
-    solution: 'function sum(a, b) { return a + b; }',
-    hint: 'Check the spelling of keywords',
-    timeLimit: 20
-  },
-  {
-    id: '3',
-    code: 'const array = [1, 2, 3].map(x => x * 2;', // Missing closing parenthesis
-    solution: 'const array = [1, 2, 3].map(x => x * 2);',
-    hint: 'Make sure all parentheses are properly closed',
-    timeLimit: 20
-  },
-  {
-    id: '4',
-    code: 'let counter == 0;', // Double equals instead of single
-    solution: 'let counter = 0;',
-    hint: 'Assignment uses single equals, comparison uses double equals',
-    timeLimit: 15
-  },
-  {
-    id: '5',
-    code: 'if (x > 10 { console.log("Greater"); }', // Missing closing parenthesis
-    solution: 'if (x > 10) { console.log("Greater"); }',
-    hint: 'Check if all parentheses in the if statement are present',
-    timeLimit: 20
-  }
+import type { CodeChallenge } from '../types/game';
+
+export const codeChallenges: CodeChallenge[] = [
+  { id: 'strings', title: 'A message that parses', topic: 'Strings', difficulty: 'easy',
+    code: 'console.log(Hello World);', solution: 'console.log("Hello World");',
+    hint: 'The message is text, not a variable name.',
+    explanation: 'Quotes create a string literal. Without them, Hello World is not a valid expression.', timeLimit: 45 },
+  { id: 'return', title: 'Return the total', topic: 'Functions', difficulty: 'easy',
+    code: 'function sum(a, b) { retur a + b; }', solution: 'function sum(a, b) { return a + b; }',
+    hint: 'Look closely at the keyword before a + b.',
+    explanation: 'The return keyword sends a value back to the caller. A misspelled keyword does not.', timeLimit: 60 },
+  { id: 'map', title: 'Close the callback', topic: 'Arrays', difficulty: 'easy',
+    code: 'const doubled = [1, 2, 3].map(x => x * 2;', solution: 'const doubled = [1, 2, 3].map(x => x * 2);',
+    hint: 'Count the opening and closing parentheses.',
+    explanation: 'The map call needs a closing parenthesis after its callback expression.', timeLimit: 60 },
+  { id: 'assignment', title: 'Initialize the counter', topic: 'Variables', difficulty: 'easy',
+    code: 'let counter == 0;', solution: 'let counter = 0;',
+    hint: 'Declaring a variable is different from comparing two values.',
+    explanation: 'A declaration uses = for its initial value. == is a comparison operator.', timeLimit: 45 },
+  { id: 'condition', title: 'Finish the condition', topic: 'Control flow', difficulty: 'easy',
+    code: 'if (x > 10 { console.log("Greater"); }', solution: 'if (x > 10) { console.log("Greater"); }',
+    hint: 'The condition must end before the block begins.',
+    explanation: 'An if condition is enclosed in parentheses; the body follows inside braces.', timeLimit: 60 },
+  { id: 'equality', title: 'Compare, do not assign', topic: 'Operators', difficulty: 'medium',
+    code: 'if (role = "admin") { grantAccess(); }', solution: 'if (role === "admin") { grantAccess(); }',
+    hint: 'Use strict equality to compare the role.',
+    explanation: 'Assignment changes role and evaluates to the assigned value. === compares values without coercion.', timeLimit: 60 },
+  { id: 'bounds', title: 'Stay inside the array', topic: 'Loops', difficulty: 'medium',
+    code: 'for (let i = 0; i <= items.length; i++) {\n  console.log(items[i]);\n}',
+    solution: 'for (let i = 0; i < items.length; i++) {\n  console.log(items[i]);\n}',
+    hint: 'The last valid index is one less than the length.',
+    explanation: 'Using <= visits items[items.length], one position past the last element.', timeLimit: 90 },
+  { id: 'filter', title: 'Keep the even values', topic: 'Arrays', difficulty: 'medium',
+    code: 'const even = numbers.filter(n => { n % 2 === 0; });',
+    solution: 'const even = numbers.filter(n => { return n % 2 === 0; });',
+    hint: 'A callback with braces needs to return its result.',
+    explanation: 'Without return, this callback returns undefined for every item, so filter removes them all.', timeLimit: 75 },
+  { id: 'reduce', title: 'Add from zero', topic: 'Arrays', difficulty: 'medium',
+    code: 'const total = prices.reduce((sum, price) => sum + price);',
+    solution: 'const total = prices.reduce((sum, price) => sum + price, 0);',
+    hint: 'Supply an initial value so an empty array also has a total.',
+    explanation: 'An initial accumulator of 0 makes reduce return 0 for an empty array instead of throwing.', timeLimit: 75 },
+  { id: 'sort', title: 'Sort numbers numerically', topic: 'Arrays', difficulty: 'medium',
+    code: 'const ascending = [...numbers].sort();', solution: 'const ascending = [...numbers].sort((a, b) => a - b);',
+    hint: 'The default sort compares string representations. Provide a numeric comparator.',
+    explanation: 'Subtracting b from a orders numbers from smallest to largest. The copy preserves the input array.', timeLimit: 75 },
+  { id: 'nullish', title: 'Keep a valid zero', topic: 'Operators', difficulty: 'medium',
+    code: 'const count = savedCount || 10;', solution: 'const count = savedCount ?? 10;',
+    hint: 'Use a default only for null or undefined, not for every falsy value.',
+    explanation: '?? keeps 0, false and empty strings. || replaces all of those with its fallback.', timeLimit: 60 },
+  { id: 'async', title: 'Wait for the response', topic: 'Async', difficulty: 'medium',
+    code: 'async function load(url) {\n  const response = fetch(url);\n  return response.json();\n}',
+    solution: 'async function load(url) {\n  const response = await fetch(url);\n  return response.json();\n}',
+    hint: 'fetch returns a promise, not a Response object.',
+    explanation: 'await unwraps the fetch promise before calling json. Production code should also handle HTTP errors.', timeLimit: 90 },
 ];
