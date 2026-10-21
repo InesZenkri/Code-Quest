@@ -8,7 +8,9 @@ test('practice can be completed using keyboard submission', async ({ page }) => 
     await expect(page.getByRole('heading', { name: 'Bug fixed', exact: true })).toBeVisible();
     await page.getByRole('button', { name: c === codeChallenges.at(-1) ? 'See results' : 'Next challenge' }).click();
   }
-  await expect(page.getByText('12 / 12 fixed')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Every round reviewed.' })).toBeVisible();
+  await expect(page.locator('.stat strong', { hasText: '12 / 12' })).toBeVisible();
+  await expect(page.locator('.stat span', { hasText: 'fixed' })).toBeVisible();
   await expect(page.getByText('Sprint best on this browser')).toBeHidden();
 });
 test('sprint shows the reward breakdown after a correct fix', async ({ page }) => {

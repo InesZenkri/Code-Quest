@@ -16,7 +16,7 @@ export function useGameLogic() {
   const [best, setBest] = useState(readBest);
   useEffect(() => {
     if (game.status !== 'playing' || game.mode !== 'sprint') return;
-    const timer = window.setInterval(() => setGame(prev => tick(prev, Date.now())), 200);
+    const timer = window.setInterval(() => setGame(prev => tick(prev, Date.now(), codeChallenges[prev.index])), 200);
     return () => window.clearInterval(timer);
   }, [game.status, game.mode]);
   useEffect(() => {
@@ -29,7 +29,7 @@ export function useGameLogic() {
     start: (mode: Mode) => { setInput(''); setGame(startRound(initialState(mode), codeChallenges[0], Date.now())); },
     submit: () => setGame(prev => submitAnswer(prev, codeChallenges[prev.index], input, Date.now())),
     hint: () => setGame(prev => revealHint(prev)),
-    skip: () => setGame(prev => finishRound(tick(prev, Date.now()), false)),
+    skip: () => setGame(prev => { const done = tick(prev, Date.now(), codeChallenges[prev.index]); return done.status === 'playing' ? finishRound(done, false, false, codeChallenges[done.index]) : done; }),
     next: () => { setInput(''); setGame(prev => nextRound(prev, codeChallenges, Date.now())); },
     home: () => { setInput(''); setGame(initialState()); },
   };

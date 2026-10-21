@@ -17,6 +17,13 @@ export interface RoundReward {
   attemptPenalty: number;
   total: number;
 }
+export interface RoundResult {
+  id: string;
+  title: string;
+  outcome: 'fixed' | 'timeout' | 'skipped';
+  clean: boolean;
+  reward: number | null;
+}
 export interface GameState {
   status: 'idle' | 'playing' | 'review' | 'finished';
   mode: Mode;
@@ -32,4 +39,6 @@ export interface GameState {
   feedback: string;
   correct: boolean;
   reward: RoundReward | null;
+  results: RoundResult[];
+  totalWrong: number;
 }
