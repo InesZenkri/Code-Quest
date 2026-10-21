@@ -1,9 +1,9 @@
-export type Mode = 'sprint' | 'practice';
+export type Mode = 'sprint' | 'daily' | 'practice';
 export interface CodeChallenge {
   id: string;
   title: string;
   topic: string;
-  difficulty: 'easy' | 'medium';
+  difficulty: 'easy' | 'medium' | 'hard';
   code: string;
   solution: string;
   hint: string;
