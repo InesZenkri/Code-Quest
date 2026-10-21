@@ -2,6 +2,8 @@
 
 A small JavaScript debugging game. Read a broken snippet, type the fix, then check the explanation. Built with React, TypeScript and Vite.
 
+![Demo: starting a sprint, typing the fix, using a hint and skipping a round](docs/debug-sprint-demo.gif)
+
 The [hosted demo](https://debugit.netlify.app/) may run an older version until these changes are merged and deployed. Run the branch locally to try the version described below.
 
 ## Play
