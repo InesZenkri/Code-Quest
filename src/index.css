@@ -43,3 +43,5 @@ textarea { width: 100%; min-height: 130px; resize: vertical; padding: 14px; back
 .quiet { background: transparent; margin-top: 18px; font-size: .85rem; }
 footer { color: #91a3b7; font-size: .8rem; margin-top: 30px; }
 @media (max-width: 600px) { .shell { padding: 24px 14px; } .board { padding: 20px 16px; } .mode-grid { grid-template-columns: 1fr; gap: 14px; } .mode-grid p { min-height: 0; } .metrics { font-size: .9rem; } }
+.reward { color: #99f6d5; font-weight: 650; margin: 0 0 14px; }
+.reward span { color: #adbed0; font-weight: 400; font-size: .9rem; }

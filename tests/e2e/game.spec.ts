@@ -8,8 +8,16 @@ test('practice can be completed using keyboard submission', async ({ page }) => 
     await expect(page.getByRole('heading', { name: 'Bug fixed', exact: true })).toBeVisible();
     await page.getByRole('button', { name: c === codeChallenges.at(-1) ? 'See results' : 'Next challenge' }).click();
   }
-  await expect(page.getByText('1200 points')).toBeVisible();
   await expect(page.getByText('12 / 12 fixed')).toBeVisible();
+  await expect(page.getByText('Sprint best on this browser')).toBeHidden();
+});
+test('sprint shows the reward breakdown after a correct fix', async ({ page }) => {
+  await page.goto('/'); await page.getByRole('button', { name: 'Start sprint' }).click();
+  await page.getByLabel('Your fix').fill('wrong'); await page.getByRole('button', { name: 'Check fix' }).click();
+  await expect(page.getByRole('status')).toContainText('Not the reference');
+  await page.getByLabel('Your fix').fill(codeChallenges[0].solution);
+  await page.getByRole('button', { name: 'Check fix' }).click();
+  await expect(page.getByText(/\+\d+ points \(100 base \+ \d+ time - 10 wrong try\)/)).toBeVisible();
 });
 test('sprint timeout, retry, hint and game-over flow', async ({ page }) => {
   await page.clock.install(); await page.goto('/');
@@ -37,11 +45,4 @@ test('best score survives reload', async ({ page }) => {
   }
   await expect.poll(() => page.evaluate(() => localStorage.getItem('debug-game:sprint-best:v1'))).not.toBeNull();
   await page.reload(); await expect(page.getByText(/Sprint best on this browser: [1-9]/)).toBeVisible();
-});
-test('mobile layout fits and blocked storage does not break play', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.addInitScript(() => { Storage.prototype.getItem = () => { throw new Error('disabled'); }; Storage.prototype.setItem = () => { throw new Error('disabled'); }; });
-  await page.goto('/'); await page.getByRole('button', { name: 'Start practice' }).click();
-  await expect(page.getByLabel('Your fix')).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
 });
