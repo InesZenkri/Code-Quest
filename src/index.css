@@ -141,3 +141,11 @@ footer { color: #6f9a87; font-size: .8rem; margin-top: 30px; }
   .title-bug, .metrics .urgent strong { animation: none; }
   button, .mode-grid > div { transition: none; }
 }
+
+/* Topics + share */
+.topics { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+.topic { border: 1px solid var(--edge); border-radius: 999px; padding: 4px 12px;
+  font-size: .82rem; color: #9fd8bf; background: rgba(4, 12, 9, .6); }
+.topic-full { color: var(--neon-soft); border-color: rgba(52, 211, 153, .55);
+  box-shadow: 0 0 10px rgba(52, 211, 153, .18); }
+@media (min-width: 720px) { .mode-grid { grid-template-columns: 1fr 1fr 1fr; } }

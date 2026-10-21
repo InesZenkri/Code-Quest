@@ -21,16 +21,17 @@ export function GameBoard({ session: s }: Props) {
   const review = g.status === 'review';
   const score = useAnimatedNumber(g.score);
   const streak = cleanStreak(g.results);
+  const timed = g.mode !== 'practice';
   const diff = review ? diffLines(c.code, c.solution) : [];
   return <section className="board" aria-label="Debugging round">
     <div className="round-meta"><span>Round {g.index + 1} / {s.total}</span><span>{c.topic} / {c.difficulty}</span></div>
     <div className="metrics">
-      {g.mode === 'sprint'
+      {timed
         ? <><span className="metric"><Trophy aria-hidden="true" /> Score <strong>{score}</strong></span>
           <span className="metric"><Heart aria-hidden="true" /> Lives <strong>{g.lives} / 3</strong></span></>
         : <span className="metric"><Trophy aria-hidden="true" /> Fixed <strong>{g.solved} / {s.total}</strong></span>}
       {streak >= 2 && !review && <span className="metric streak"><Zap aria-hidden="true" /> {streak}x streak</span>}
-      {g.mode === 'sprint' && g.status === 'playing' &&
+      {timed && g.status === 'playing' &&
         <span className={`metric ${g.secondsLeft <= 10 ? 'urgent' : ''}`}>Time <strong>{g.secondsLeft}s</strong></span>}
     </div>
     <h2><Bug className="title-bug" aria-hidden="true" />{c.title}</h2>
@@ -38,7 +39,7 @@ export function GameBoard({ session: s }: Props) {
     <CodeBlock code={c.code} />
     {review ? <div className="review">
       <h3>{g.correct ? 'Bug fixed' : 'Reference fix'}</h3>
-      {g.correct && g.reward && g.mode === 'sprint' && <RewardLine reward={g.reward} />}
+      {g.correct && g.reward && timed && <RewardLine reward={g.reward} />}
       {g.correct && g.mode === 'practice' && <p className="reward">Counted as fixed. Practice earns no points.</p>}
       <div className="diff" role="img" aria-label="Line by line difference between the buggy code and the fix">
         {diff.map((l, i) => <div key={i} className={`diff-${l.type}`}>
@@ -57,7 +58,7 @@ export function GameBoard({ session: s }: Props) {
       <p id="answer-help" className="muted">Match the reference spelling and spacing. Outer whitespace is ignored. Ctrl/Cmd + Enter submits.</p>
       <div className="actions"><button className="primary" type="submit" disabled={!s.input.trim()}>Check fix</button>
         <button type="button" onClick={s.hint} disabled={g.hintUsed}><Lightbulb aria-hidden="true" /> Hint{g.hintUsed ? ' shown' : ' (-20 from this round)'}</button>
-        <button type="button" onClick={s.skip}><SkipForward aria-hidden="true" /> Skip{g.mode === 'sprint' ? ' (-1 life)' : ' / show fix'}</button></div>
+        <button type="button" onClick={s.skip}><SkipForward aria-hidden="true" /> Skip{timed ? ' (-1 life)' : ' / show fix'}</button></div>
       {g.hintUsed && <p className="hint">Hint: {c.hint}</p>}
     </form>}
     <p role="status" className="feedback">{g.feedback}</p>
