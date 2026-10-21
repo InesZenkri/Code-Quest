@@ -10,6 +10,13 @@ export interface CodeChallenge {
   explanation: string;
   timeLimit: number;
 }
+export interface RoundReward {
+  base: number;
+  timeBonus: number;
+  hintPenalty: number;
+  attemptPenalty: number;
+  total: number;
+}
 export interface GameState {
   status: 'idle' | 'playing' | 'review' | 'finished';
   mode: Mode;
@@ -18,9 +25,11 @@ export interface GameState {
   lives: number;
   solved: number;
   attempts: number;
+  wrongAttempts: number;
   hintUsed: boolean;
   secondsLeft: number;
   deadline: number;
   feedback: string;
   correct: boolean;
+  reward: RoundReward | null;
 }
