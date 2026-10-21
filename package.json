@@ -8,11 +8,12 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "tsx --test tests/game.test.ts",
+    "test": "tsx --test tests/game.test.ts tests/visual.test.ts",
     "test:e2e": "playwright test",
     "typecheck": "tsc -b --pretty false"
   },
   "dependencies": {
+    "lucide-react": "^1.61.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
