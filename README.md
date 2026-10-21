@@ -8,11 +8,11 @@ The [hosted demo](https://debugit.netlify.app/) may run an older version until t
 
 ## Play
 
-- **Sprint:** 12 rounds, a per-round clock and three lives. A timeout or skip costs one life. Wrong submissions can be retried before the deadline.
-- **Practice:** the same challenges without a clock or lost lives. Skip to the reference fix when stuck.
+- **Sprint:** 12 rounds, a per-round clock and three lives. A timeout or skip costs one life. Wrong guesses can be retried, but each one lowers that round's reward.
+- **Practice:** the same challenges without a clock, lives or points. The game tracks rounds fixed instead. Skip to the reference fix when stuck.
 - Each challenge has a topic, difficulty, hint and explanation. Topics include strings, functions, arrays, loops, operators and async code.
 - Enter a multiline fix and press **Check fix** or **Ctrl/Cmd + Enter**. Review the explanation before moving on.
-- A correct fix earns 100 points, plus seconds remaining in sprint mode. A hint reduces the potential reward for that round by 20 points, once. The last round counts too.
+- A correct fix earns 100 points plus the exact seconds left on the clock in sprint mode. A hint costs 20 points of that round's reward, each wrong guess costs 10, and the reward never drops below zero. The review screen shows the full breakdown after every round. The last round counts too.
 - The best completed sprint score is saved in this browser's local storage. There is no account, server-side history, leaderboard or achievement system. Disabled storage does not stop play.
 
 ## Run locally
