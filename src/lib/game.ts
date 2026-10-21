@@ -9,7 +9,7 @@ export const HINT_PENALTY = 20;
 export const WRONG_ATTEMPT_PENALTY = 10;
 
 export function roundReward(state: GameState): RoundReward {
-  const timeBonus = state.mode === 'sprint' ? state.secondsLeft : 0;
+  const timeBonus = state.mode !== 'practice' ? state.secondsLeft : 0;
   const hintPenalty = state.hintUsed ? HINT_PENALTY : 0;
   const attemptPenalty = state.wrongAttempts * WRONG_ATTEMPT_PENALTY;
   const total = Math.max(0, BASE_POINTS + timeBonus - hintPenalty - attemptPenalty);
@@ -37,7 +37,7 @@ export function finishRound(state: GameState, correct: boolean, timedOut = false
     score: state.score + (reward ? reward.total : 0), reward,
     results: result ? [...state.results, result] : state.results,
     totalWrong: state.totalWrong + state.wrongAttempts,
-    lives: state.lives - Number(!correct && state.mode === 'sprint'),
+    lives: state.lives - Number(!correct && state.mode !== 'practice'),
     feedback: correct ? 'Correct. Read the explanation, then move on.' : timedOut ? 'Time is up. Review the fix before continuing.' : 'Round skipped. Here is the reference fix.' };
 }
 export function submitAnswer(state: GameState, challenge: CodeChallenge, input: string, now: number): GameState {
