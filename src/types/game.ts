@@ -1,9 +1,9 @@
-export type Mode = 'sprint' | 'practice';
+export type Mode = 'sprint' | 'daily' | 'practice';
 export interface CodeChallenge {
   id: string;
   title: string;
   topic: string;
-  difficulty: 'easy' | 'medium';
+  difficulty: 'easy' | 'medium' | 'hard';
   code: string;
   solution: string;
   hint: string;
@@ -16,6 +16,13 @@ export interface RoundReward {
   hintPenalty: number;
   attemptPenalty: number;
   total: number;
+}
+export interface RoundResult {
+  id: string;
+  title: string;
+  outcome: 'fixed' | 'timeout' | 'skipped';
+  clean: boolean;
+  reward: number | null;
 }
 export interface GameState {
   status: 'idle' | 'playing' | 'review' | 'finished';
@@ -32,4 +39,6 @@ export interface GameState {
   feedback: string;
   correct: boolean;
   reward: RoundReward | null;
+  results: RoundResult[];
+  totalWrong: number;
 }
